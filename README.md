@@ -1,2 +1,2 @@
 # Cisco
-    -Scripts das aulas e laboratorios pessoais
+    Scripts das aulas e laboratorios pessoais

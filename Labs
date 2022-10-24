@@ -1,0 +1,61 @@
+#cloud-config
+
+users:
+
+    - default
+
+disable_root: true
+
+preserve_hostname: false
+
+apt_preserve_sources_list: true
+
+system_info:
+
+   distro: debian
+
+   default_user:
+
+      name: debian
+
+      lock_passwd: True
+
+      gecos: Debian
+
+      groups: [adm, audio, cdrom, dialout, dip, floppy, netdev, plugdev, sudo, video]
+
+      sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+
+      shell: /bin/bash
+
+   paths:
+
+      cloud_dir: /var/lib/cloud/
+
+      templates_dir: /etc/cloud/templates/
+
+      upstart_dir: /etc/init/
+
+   package_mirrors:
+
+     - arches: [default]
+
+       failsafe:
+
+         primary: http://deb.debian.org/debian
+
+         security: http://security.debian.org/
+
+   ssh_svcname: ssh
+
+bootcmd:
+
+  - echo “Hello world!” > /home/hello.txt
+
+packages:
+
+  - vim
+
+  - git
+
+  - htop

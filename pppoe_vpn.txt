@@ -1,0 +1,106 @@
+# R1 - server
+
+bba-group pppoe global
+    virtual-template 1
+    exit
+
+int virtual-template 1
+    ip add 10.10.10.1 255.255.255.0
+    peer default ip add pool MYPOOL
+    ppp authentication chap
+    no sh
+    exit
+
+ip local pool MYPOOL 10.10.10.2 10.10.10.254
+username  chapuser password Skill39
+
+int g0/0
+    pppoe enable group pppoe
+    no sh
+    exit
+
+
+
+# R2 - client
+
+enable
+conf t
+int dialer 1
+    ip add negotiated
+    dialer pool 1
+    encapasulation ppp
+    ppp chap hostname chapuser
+    ppp chap password Skill39
+
+int g0/0
+    pppoe-client dialer-pool-number 1
+    no sh
+    exit
+
+# Check config
+end
+    show ip int br
+#        Dialer1                    10.10.10.2   up  up
+
+    show pppoe summary 
+#        1 client session
+
+    show pppoe session
+#        1 client session
+#            Uniq ID  PPPoE  RemMAC          Port                    VT  VA         State
+#           SID  LocMAC                                      VA-st      Type
+#        N/A      1  5000.0013.0003  Gi0/0                   Di1 Vi1        UP
+#                5000.0012.0000                              UP
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+bba-group pppoe PPPOE
+    virtual-template 1
+    exit
+
+int g0/0
+    pppoe enable group PPPOE
+    exit
+
+int loop0
+    ip add 1.0.0.10 255.255.255.255
+    exit
+
+int virtual-template 1
+    encapasulation ppp
+    ip mtu 1492
+    ip unnumbered loop0
+    peer default ip address pool IPCP
+    ppp authentiction pap
+
+ip local pool IPCP 1.0.0.1
+username  R2 password Skill39
